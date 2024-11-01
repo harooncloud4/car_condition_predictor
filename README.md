@@ -25,3 +25,11 @@ python --version
 
 # Install the required libraries
 pip install -r requirements.txt
+
+
+#🏃 Usage
+To run the project:
+
+#Train the Model
+Train the model using the provided dataset:
+

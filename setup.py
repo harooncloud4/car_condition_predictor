@@ -22,7 +22,9 @@ def read_excel_file():
     """
 
     # Construct the file path
-    file_path = os.path.join(os.path.dirname(__file__), 'data/Grade.xlsx')
+    #file_path = os.path.join(os.path.dirname(__file__), 'data/Grade.xlsx')
+    file_path = os.path.join(os.getcwd(), 'data', 'Grade.xlsx')
+
     file_path = file_path.replace("\\", "/")  # Normalize the file path
 
     # Read the Excel file
@@ -142,7 +144,7 @@ def add_column_daysLeftTillMOTExpiry(df):
         DESCRIPTION.
 
     """
-    df['daysLeftTillMOTExpiry'] = pd.to_datetime('2024-02-21 00:00:00')
+    df['last_date_of_mot'] = pd.to_datetime('2024-02-21 00:00:00')
     return df
 
 
@@ -174,8 +176,66 @@ def fill_nan_values_with_mean_in_df_from_meandf(df):
     mapping_dict = mean_df.set_index('key')['GuidePrice'].to_dict()
     mapping_dict1 = mean_df.set_index('key')['NewPrice'].to_dict()
     df['GuidePrice'] = df['GuidePrice'].fillna(df['key'].map(mapping_dict))
-    df['NewPrice'] = df['NewPrice'].fillna(df['key'].map(mapping_dict))
+    df['NewPrice'] = df['NewPrice'].fillna(df['key'].map(mapping_dict1))
     df = df.drop(columns=['key'])
+    return df
+
+
+def remove_nan_rows_if_in_MotExpireDate(df):
+    
+    column_name = 'MotExpireDate'
+
+    # Remove rows where the specified column has NaN values
+    df = df.dropna(subset=['MotExpireDate']).reset_index(drop=True)
+
+    return df
+
+def count_rows_by_year(df):
+    df['MotExpireDate'] = pd.to_datetime(df['MotExpireDate'])
+    row_count_by_year = df.groupby(df['MotExpireDate'].dt.year).size()
+    return row_count_by_year
+
+
+def remove_dates_that_in_1800(df):
+    df = df[df['MotExpireDate'].dt.year >= 2020]
+    return df
+
+
+def days_remaining_till_mot_expires(df):
+    df['MotExpireDate'] = pd.to_datetime(df['MotExpireDate'])
+    df['last_date_of_mot'] = pd.to_datetime(df['last_date_of_mot'])
+    
+    # Calculate the difference in days between EndDate and StartDate
+    df['daysLeftTillMotExpiry'] = (df['last_date_of_mot'] - df['MotExpireDate']).dt.days
+    return df
+
+
+def move_columns_to_keep_target_value_at_the_end(df):
+    df = df[['Category', 'Manufacturer', 'Model', 'Colour', 'ImageAvailable',
+           'Mileage', 'Age_Months', 'Fuel', 'Transmission', 'GuidePrice',
+           'NewPrice', 'BodyType', 'Engine', 'MotExpireDate', 'IsRunning',
+           'IsATaxi', 'last_date_of_mot', 'daysLeftTillMotExpiry','Grade']]
+    return df
+
+def delete_isATaxi_if_y(df):
+    counts = df['IsATaxi'].value_counts()
+    
+    df = df[df['IsATaxi'] != 'Y']
+    return df
+
+def delete_isRunning_if_y(df):
+    counts1 = df['IsRunning'].value_counts()
+    
+    df = df[df['IsRunning'] == 'Y']
+    return df
+
+def remove_grade_with_nan_values(df):
+    
+    column_name = 'Grade'
+
+    # Remove rows where the specified column has NaN values
+    df = df.dropna(subset=['Grade']).reset_index(drop=True)
+
     return df
 
 
@@ -188,7 +248,19 @@ if __name__ == '__main__':
       unique_df = get_df_with_unique_values(df)
       df = add_column_daysLeftTillMOTExpiry(df)
       mean_df = get_the_mean_by_multiple_categories(df)
-           # First few rows of the data
+      df = remove_nan_rows_if_in_MotExpireDate(df)
+      row_count_by_year = count_rows_by_year(df)
+      df = remove_dates_that_in_1800(df)
+      df = days_remaining_till_mot_expires(df)
+      df = move_columns_to_keep_target_value_at_the_end(df)
+      df = delete_isATaxi_if_y(df)
+      df = delete_isRunning_if_y(df)
+      df = remove_grade_with_nan_values(df)
+      missing_values = df.isnull().sum()
+      print(missing_values)
+      
+      
+# First few rows of the data
 #     df = get_rows_with_transaction_more_than_20(df)
 #     df = get_rows_from_2010(df)
 #     df = sum_transaction_with_the_same_date(df)

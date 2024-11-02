@@ -19,7 +19,7 @@ This project aims to predict car prices based on various features such as make, 
 ### Prerequisites
 List any prerequisites needed to run the project (e.g., Python version, libraries, etc.).
 
-```bash
+```
 # Ensure you have Python 3.x installed
 python --version
 

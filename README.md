@@ -28,9 +28,9 @@ pip install -r requirements.txt
 ```bash
 
 
-# 🏃 Usage
+##🏃 Usage
 To run the project:
 
-#Train the Model
+##Train the Model
 Train the model using the provided dataset:
 

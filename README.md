@@ -6,7 +6,7 @@ This project aims to predict car prices based on various features such as make, 
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
+- [🏃 Usage](#usage)
 - [Data](#data)
 - [Modeling](#modeling)
 - [Results](#results)
@@ -30,7 +30,12 @@ pip install -r requirements.txt
 
 ## 🏃 Usage
 To run the project:
+# Data
+# Modeling
+# Results
+# Contributing
+# Project Title
 
-##Train the Model
+## Train the Model
 Train the model using the provided dataset:
 

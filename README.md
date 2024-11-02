@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```
 
 
-##🏃 Usage
+## 🏃 Usage
 To run the project:
 
 ##Train the Model

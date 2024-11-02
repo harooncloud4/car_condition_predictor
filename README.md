@@ -6,7 +6,7 @@ This project aims to predict car prices based on various features such as make, 
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#🏃 Usage)
+- [Usage](#🏃Usage)
 - [Data](#data)
 - [Modeling](#modeling)
 - [Results](#results)

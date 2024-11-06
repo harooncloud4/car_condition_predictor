@@ -491,8 +491,8 @@ def define_feature_and_value(df):
         DESCRIPTION.
 
     """
-    X = df[['Category_label', 'Manufacturer_label',
-    'Colour_label', 'Fuel_label', 'Transmission_label', 'BodyType_label','MOT_Bucket_label']]  # Select multiple features
+    X = df[['Category_label', 'Manufacturer_label','Colour_label', 'Fuel_label', 'Transmission_label', 
+            'BodyType_label','MOT_Bucket_label']]  # Select multiple features
     y = df['Grade']       
     return X,y                                  
 
@@ -595,7 +595,12 @@ if __name__ == '__main__':
     
       # Apply SMOTE to the training data
       X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
-    
+      # Bar plot for categorical Series
+      plt.figure(figsize=(8, 4))
+      y_train_resampled.value_counts().plot(kind='bar', title='Bar Plot of Categorical Series')
+      plt.xlabel('Category')
+      plt.ylabel('Frequency')
+      plt.show()
        # Check new class distribution
       print("Resampled class distribution:", Counter(y_train_resampled))
       
